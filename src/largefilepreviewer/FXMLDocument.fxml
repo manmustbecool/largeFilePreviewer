@@ -1,14 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane id="AnchorPane" prefHeight="200" prefWidth="320" xmlns:fx="http://javafx.com/fxml/1" fx:controller="largefilepreviewer.FXMLDocumentController">
+<AnchorPane id="AnchorPane" prefHeight="703.0" prefWidth="957.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="largefilepreviewer.FXMLDocumentController">
     <children>
-        <Button layoutX="126" layoutY="90" text="Click Me!" onAction="#handleButtonAction" fx:id="button" />
-        <Label layoutX="126" layoutY="120" minHeight="16" minWidth="69" fx:id="label" />
+        <Label fx:id="labelFileBox" layoutX="29.0" layoutY="34.0" minHeight="16" minWidth="69" text="please" />
+      <TableView layoutX="29.0" layoutY="129.0" prefHeight="220.0" prefWidth="911.0">
+        <columns>
+          <TableColumn prefWidth="75.0" text="C1" />
+          <TableColumn prefWidth="75.0" text="C2" />
+        </columns>
+      </TableView>
+      <TextArea fx:id="textAreaFileText" layoutX="26.0" layoutY="380.0" prefHeight="265.0" prefWidth="911.0" />
+      <TextField id="textFieldFileBox" fx:id="textFieldFileBox" layoutX="29.0" layoutY="57.0" onDragDropped="#handleFileBoxOnDragDropped" onDragExited="#handleFileBoxOnDragExited" onDragOver="#handleFileBoxOnDragOver" prefHeight="25.0" prefWidth="430.0" />
     </children>
 </AnchorPane>
