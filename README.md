@@ -6,4 +6,4 @@ It will only show the head of the file rather than load whole file.
 Tested on Windows 7
 
 Download and install:
-https://github.com/manmustbecool/largeFilePreviewer/tree/master/download/largeFilePreviewer-1.0.zip
+https://github.com/manmustbecool/largeFilePreviewer/tree/master/download/largeFilePreviewer-1.0.exe
