@@ -14,15 +14,24 @@ import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
+import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableColumn.CellDataFeatures;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
+import javafx.util.Callback;
 
 /**
  *
@@ -41,6 +50,9 @@ public class FXMLDocumentController implements Initializable {
 
     @FXML
     private TextArea textAreaFileText;
+
+    @FXML
+    private TableView tableViewFileText;
 
     public FXMLDocumentController() {
         this.textFieldFileBox = new TextField();
@@ -109,6 +121,80 @@ public class FXMLDocumentController implements Initializable {
         event.setDropCompleted(success);
         event.consume();
 
+        readFile();
+        readCSVFile();
+
+    }
+
+    private TableColumn<ObservableList<StringProperty>, String> createColumn(
+            final int columnIndex, String columnTitle) {
+        TableColumn<ObservableList<StringProperty>, String> column = new TableColumn<>();
+        String title;
+        if (columnTitle == null || columnTitle.trim().length() == 0) {
+            title = "Column " + (columnIndex + 1);
+        } else {
+            title = columnTitle;
+        }
+        column.setText(title);
+        column.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ObservableList<StringProperty>, String>, ObservableValue<String>>() {
+            public ObservableValue<String> call(
+                    CellDataFeatures<ObservableList<StringProperty>, String> cellDataFeatures) {
+                ObservableList<StringProperty> values = cellDataFeatures.getValue();
+                if (columnIndex >= values.size()) {
+                    return new SimpleStringProperty("");
+                } else {
+                    return cellDataFeatures.getValue().get(columnIndex);
+                }
+            }
+        });
+        return column;
+    }
+
+    private void readCSVFile() {
+        // Open the file
+        try {
+            FileInputStream fstream = new FileInputStream(textFieldFileBox.getText());
+            BufferedReader br = new BufferedReader(new InputStreamReader(fstream));
+
+            int lineCount = 0;
+
+            tableViewFileText.getItems().clear();
+            tableViewFileText.getColumns().clear();
+
+            String strLine;
+            //Read File Line By Line
+            if ((strLine = br.readLine()) != null) {
+                String[] headerValues = strLine.split(";");
+                for (int column = 0; column < headerValues.length; column++) {
+                    tableViewFileText.getColumns().add(createColumn(column, headerValues[column]));
+                }
+            }
+
+            while ((strLine = br.readLine()) != null) {
+                // Add data to table:
+                ObservableList<StringProperty> data = FXCollections.observableArrayList();
+
+                String[] dataValues = strLine.split(";");
+                for (String value : dataValues) {
+                    data.add(new SimpleStringProperty(value));
+                }
+                tableViewFileText.getItems().add(data);
+                lineCount++;
+                if (lineCount >= 50) {
+                    break;
+                }
+
+            }
+
+            //Close the input stream
+            br.close();
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    private void readFile() {
         // Open the file
         try {
             FileInputStream fstream = new FileInputStream(textFieldFileBox.getText());
@@ -122,7 +208,7 @@ public class FXMLDocumentController implements Initializable {
             while ((strLine = br.readLine()) != null) {
                 // Print the content on the console
                 System.out.println(strLine);
-                fileText = fileText + strLine;
+                fileText = fileText + strLine + "\n";
                 lineCount++;
                 if (lineCount >= 50) {
                     break;
@@ -134,10 +220,10 @@ public class FXMLDocumentController implements Initializable {
             br.close();
 
             textAreaFileText.setText(fileText);
+
         } catch (Exception ex) {
             ex.printStackTrace();
         }
-
     }
 
     @FXML

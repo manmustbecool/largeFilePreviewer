@@ -9,14 +9,17 @@
 
 <AnchorPane id="AnchorPane" prefHeight="703.0" prefWidth="957.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="largefilepreviewer.FXMLDocumentController">
     <children>
-        <Label fx:id="labelFileBox" layoutX="29.0" layoutY="34.0" minHeight="16" minWidth="69" text="please" />
-      <TableView layoutX="29.0" layoutY="129.0" prefHeight="220.0" prefWidth="911.0">
+        <Label fx:id="labelFileBox" layoutX="29.0" layoutY="34.0" minHeight="16" minWidth="69" text="Please drap and drop a file in the below box" />
+      <TableView fx:id="tableViewFileText" layoutX="29.0" layoutY="129.0" prefHeight="220.0" prefWidth="911.0">
         <columns>
           <TableColumn prefWidth="75.0" text="C1" />
           <TableColumn prefWidth="75.0" text="C2" />
         </columns>
       </TableView>
-      <TextArea fx:id="textAreaFileText" layoutX="26.0" layoutY="380.0" prefHeight="265.0" prefWidth="911.0" />
-      <TextField id="textFieldFileBox" fx:id="textFieldFileBox" layoutX="29.0" layoutY="57.0" onDragDropped="#handleFileBoxOnDragDropped" onDragExited="#handleFileBoxOnDragExited" onDragOver="#handleFileBoxOnDragOver" prefHeight="25.0" prefWidth="430.0" />
+      <TextArea fx:id="textAreaFileText" layoutX="29.0" layoutY="409.0" prefHeight="265.0" prefWidth="911.0" />
+      <TextField id="textFieldFileBox" fx:id="textFieldFileBox" layoutX="29.0" layoutY="57.0" onDragDropped="#handleFileBoxOnDragDropped" onDragExited="#handleFileBoxOnDragExited" onDragOver="#handleFileBoxOnDragOver" prefHeight="25.0" prefWidth="695.0" />
+      <Label fx:id="labelFileBox1" layoutX="29.0" layoutY="105.0" minHeight="16" minWidth="69" text="Show file content in CSV format" />
+      <Label fx:id="labelFileBox11" layoutX="29.0" layoutY="384.0" minHeight="16" minWidth="69" text="Show file content in plain text format" />
+      <Label fx:id="labelFileBox12" layoutX="874.0" layoutY="14.0" minHeight="16" minWidth="69" text="v 0.01" />
     </children>
 </AnchorPane>
