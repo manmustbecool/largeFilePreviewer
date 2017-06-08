@@ -16,6 +16,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -30,6 +31,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.TransferMode;
 import javafx.util.Callback;
 
@@ -46,17 +48,36 @@ public class FXMLDocumentController implements Initializable {
     private TextField textFieldFileBox;
 
     @FXML
-    private Label labelFileBox;
-
-    @FXML
     private TextArea textAreaFileText;
 
     @FXML
     private TableView tableViewFileText;
 
+    @FXML
+    private TextField textFieldCsvSeparator;
+
     public FXMLDocumentController() {
         this.textFieldFileBox = new TextField();
-        labelFileBox = new Label();
+
+    }
+
+    @Override
+    public void initialize(URL url, ResourceBundle rb) {
+
+        System.out.print("init");
+        textFieldCsvSeparator.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable,
+                    String oldValue, String newValue) {
+
+                System.out.print("TextField Text Changed (newValue: " + newValue + ")\n");
+
+                if (textFieldFileBox.getText() != null && !textFieldFileBox.getText().isEmpty()) {
+                    readFile();
+                    readCSVFile();
+                }
+            }
+        });
     }
 
     private final boolean printEventTriger = false;
@@ -151,7 +172,11 @@ public class FXMLDocumentController implements Initializable {
     }
 
     private void readCSVFile() {
-        // Open the file
+
+        if (textFieldCsvSeparator.getText().isEmpty()) {
+            return;
+        }
+
         try {
             FileInputStream fstream = new FileInputStream(textFieldFileBox.getText());
             BufferedReader br = new BufferedReader(new InputStreamReader(fstream));
@@ -164,7 +189,7 @@ public class FXMLDocumentController implements Initializable {
             String strLine;
             //Read File Line By Line
             if ((strLine = br.readLine()) != null) {
-                String[] headerValues = strLine.split(";");
+                String[] headerValues = strLine.split(textFieldCsvSeparator.getText());
                 for (int column = 0; column < headerValues.length; column++) {
                     tableViewFileText.getColumns().add(createColumn(column, headerValues[column]));
                 }
@@ -174,7 +199,7 @@ public class FXMLDocumentController implements Initializable {
                 // Add data to table:
                 ObservableList<StringProperty> data = FXCollections.observableArrayList();
 
-                String[] dataValues = strLine.split(";");
+                String[] dataValues = strLine.split(textFieldCsvSeparator.getText());
                 for (String value : dataValues) {
                     data.add(new SimpleStringProperty(value));
                 }
@@ -230,11 +255,6 @@ public class FXMLDocumentController implements Initializable {
     private void handleButtonAction(ActionEvent event) {
         System.out.println("You clicked me!");
         label.setText("Hello World!");
-    }
-
-    @Override
-    public void initialize(URL url, ResourceBundle rb) {
-        // TODO
     }
 
 }
