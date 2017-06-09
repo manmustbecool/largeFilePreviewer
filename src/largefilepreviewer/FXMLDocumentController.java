@@ -8,12 +8,9 @@ package largefilepreviewer;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
@@ -31,7 +28,6 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.input.TransferMode;
 import javafx.util.Callback;
 
@@ -40,9 +36,6 @@ import javafx.util.Callback;
  * @author emiewag
  */
 public class FXMLDocumentController implements Initializable {
-
-    @FXML
-    private Label label;
 
     @FXML
     private TextField textFieldFileBox;
@@ -249,12 +242,6 @@ public class FXMLDocumentController implements Initializable {
         } catch (Exception ex) {
             ex.printStackTrace();
         }
-    }
-
-    @FXML
-    private void handleButtonAction(ActionEvent event) {
-        System.out.println("You clicked me!");
-        label.setText("Hello World!");
     }
 
 }
