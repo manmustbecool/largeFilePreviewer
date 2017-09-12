@@ -57,13 +57,13 @@ public class FXMLDocumentController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
 
-        System.out.print("init");
+        System.out.println("init");
         textFieldCsvSeparator.textProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observable,
                     String oldValue, String newValue) {
 
-                System.out.print("TextField Text Changed (newValue: " + newValue + ")\n");
+                System.out.println("TextField Text Changed (newValue: " + newValue + ")");
 
                 if (textFieldFileBox.getText() != null && !textFieldFileBox.getText().isEmpty()) {
                     readFile();
@@ -74,6 +74,8 @@ public class FXMLDocumentController implements Initializable {
     }
 
     private final boolean printEventTriger = false;
+    
+    private static final int BUFFER_SIZE = 1024*5;
 
     @FXML
     public void handleFileBoxOnDragOver(DragEvent event) {
@@ -164,12 +166,15 @@ public class FXMLDocumentController implements Initializable {
         return column;
     }
 
+    /**
+     * read CSV file for table viewer
+     */
     private void readCSVFile() {
 
         if (textFieldCsvSeparator.getText().isEmpty()) {
             return;
         }
-
+        
         try {
             FileInputStream fstream = new FileInputStream(textFieldFileBox.getText());
             BufferedReader br = new BufferedReader(new InputStreamReader(fstream));
@@ -178,6 +183,19 @@ public class FXMLDocumentController implements Initializable {
 
             tableViewFileText.getItems().clear();
             tableViewFileText.getColumns().clear();
+            
+            // if readLine is too long , just exit the function
+            br.mark(BUFFER_SIZE);
+            // max read buffer
+            char[] buffer = new char[BUFFER_SIZE];
+            br.read(buffer);
+            String fileText = new String(buffer);
+            if(fileText.contains("\n")){
+                br.reset();
+            }else{
+                return;
+            }
+            
 
             String strLine;
             //Read File Line By Line
@@ -212,31 +230,22 @@ public class FXMLDocumentController implements Initializable {
         }
     }
 
+    /**
+     *  read text file for text area viewer
+     */
     private void readFile() {
         // Open the file
         try {
             FileInputStream fstream = new FileInputStream(textFieldFileBox.getText());
             BufferedReader br = new BufferedReader(new InputStreamReader(fstream));
 
-            int lineCount = 0;
-            String fileText = "";
-            String strLine;
-            //Read File Line By Line
-
-            while ((strLine = br.readLine()) != null) {
-                // Print the content on the console
-                System.out.println(strLine);
-                fileText = fileText + strLine + "\n";
-                lineCount++;
-                if (lineCount >= 50) {
-                    break;
-                }
-
-            }
+            // max read buffer
+            char[] buffer = new char[BUFFER_SIZE];
+            br.read(buffer);
+            String fileText = new String(buffer);
 
             //Close the input stream
             br.close();
-
             textAreaFileText.setText(fileText);
 
         } catch (Exception ex) {
