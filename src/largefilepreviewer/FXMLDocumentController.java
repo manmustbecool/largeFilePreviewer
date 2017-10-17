@@ -6,11 +6,18 @@
 package largefilepreviewer;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ResourceBundle;
+import java.util.zip.GZIPInputStream;
+import java.util.zip.ZipInputStream;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
@@ -48,6 +55,9 @@ public class FXMLDocumentController implements Initializable {
 
     @FXML
     private TextField textFieldCsvSeparator;
+    
+    @FXML
+    private Label labelCsvTotalColumns;
 
     public FXMLDocumentController() {
         this.textFieldFileBox = new TextField();
@@ -73,14 +83,14 @@ public class FXMLDocumentController implements Initializable {
         });
     }
 
-    private final boolean printEventTriger = false;
+    private static final boolean debug_printEventTriger = false;
     
     private static final int BUFFER_SIZE = 1024*5;
 
     @FXML
     public void handleFileBoxOnDragOver(DragEvent event) {
 
-        if (printEventTriger) {
+        if (debug_printEventTriger) {
             System.out.println("handleFileBoxOnDragOver");
         }
 
@@ -104,7 +114,7 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     public void handleFileBoxOnDragExited(DragEvent event) {
 
-        if (printEventTriger) {
+        if (debug_printEventTriger) {
             System.out.println("handleFileBoxOnDragExited");
         }
 
@@ -119,7 +129,7 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     public void handleFileBoxOnDragDropped(DragEvent event) {
 
-        if (printEventTriger) {
+        if (debug_printEventTriger) {
             System.out.println("handleFileBoxOnDragDropped");
         }
 
@@ -166,6 +176,31 @@ public class FXMLDocumentController implements Initializable {
         return column;
     }
 
+    private String getFileExtension(String path) {
+    try {
+        return path.substring(path.lastIndexOf(".") + 1);
+    } catch (Exception e) {
+        return "";
+    }
+}
+    
+    private InputStream getInputStream() throws Exception{
+        
+        String path = textFieldFileBox.getText();
+        String ext = getFileExtension(path);
+        
+        if(ext.equals("gz")){
+            FileInputStream fis = new FileInputStream(path);
+            GZIPInputStream gis = new GZIPInputStream(fis);
+            return gis;
+        }else{
+            FileInputStream fis = new FileInputStream(path);
+            return fis;
+        }
+        
+    }
+    
+    
     /**
      * read CSV file for table viewer
      */
@@ -176,26 +211,28 @@ public class FXMLDocumentController implements Initializable {
         }
         
         try {
-            FileInputStream fstream = new FileInputStream(textFieldFileBox.getText());
-            BufferedReader br = new BufferedReader(new InputStreamReader(fstream));
+        
+            InputStream is = getInputStream();
+            BufferedReader br = new BufferedReader(new InputStreamReader(is));
 
             int lineCount = 0;
 
             tableViewFileText.getItems().clear();
             tableViewFileText.getColumns().clear();
             
-            // if readLine is too long , just exit the function
+            // pre check the file
+            // if one line is too long , just exit the function
             br.mark(BUFFER_SIZE);
             // max read buffer
             char[] buffer = new char[BUFFER_SIZE];
             br.read(buffer);
             String fileText = new String(buffer);
-            if(fileText.contains("\n")){
-                br.reset();
-            }else{
+            if(!fileText.contains("\n")){
                 return;
             }
             
+            // reset the mark and read from begining
+            br.reset();
 
             String strLine;
             //Read File Line By Line
@@ -204,6 +241,7 @@ public class FXMLDocumentController implements Initializable {
                 for (int column = 0; column < headerValues.length; column++) {
                     tableViewFileText.getColumns().add(createColumn(column, headerValues[column]));
                 }
+                labelCsvTotalColumns.setText(headerValues.length+"");
             }
 
             while ((strLine = br.readLine()) != null) {
@@ -236,8 +274,8 @@ public class FXMLDocumentController implements Initializable {
     private void readFile() {
         // Open the file
         try {
-            FileInputStream fstream = new FileInputStream(textFieldFileBox.getText());
-            BufferedReader br = new BufferedReader(new InputStreamReader(fstream));
+            InputStream is = getInputStream();
+            BufferedReader br = new BufferedReader(new InputStreamReader(is));
 
             // max read buffer
             char[] buffer = new char[BUFFER_SIZE];
