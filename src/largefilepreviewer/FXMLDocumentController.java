@@ -85,7 +85,9 @@ public class FXMLDocumentController implements Initializable {
 
     private static final boolean debug_printEventTriger = false;
     
-    private static final int BUFFER_SIZE = 1024*5;
+    // a char represents a character in Java. It is 2 bytes large
+    // 1024*1024/2 will read 0.5 MB data
+    private static final int BUFFER_SIZE = 1024*1024/2;
 
     @FXML
     public void handleFileBoxOnDragOver(DragEvent event) {

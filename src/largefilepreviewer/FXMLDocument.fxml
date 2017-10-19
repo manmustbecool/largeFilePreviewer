@@ -8,34 +8,42 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" prefHeight="703.0" prefWidth="1021.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="largefilepreviewer.FXMLDocumentController">
+<AnchorPane id="AnchorPane" prefHeight="730.0" prefWidth="1021.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="largefilepreviewer.FXMLDocumentController">
     <children>
       
-   
+        
+        <Label fx:id="labelFileBox12" layoutX="874.0" layoutY="14.0" minHeight="16" minWidth="69" text="v 0.02" />
+        <TextField fx:id="textFieldCsvSeparator" layoutX="761.0" layoutY="57.0" prefHeight="25.0" prefWidth="57.0" text="," />
+        <Label fx:id="labelFileBox2" layoutX="752.0" layoutY="34.0" minHeight="16" minWidth="69" text="CSV separator  (e.g.  ;  \t  \| )" />
+        <Label fx:id="labelFileBox21" layoutX="29.0" layoutY="61.0" minHeight="16" minWidth="57.0" prefHeight="17.0" prefWidth="57.0" text="File path: " />
+      
+
+        <Label fx:id="labelFileBox1" layoutX="29.0" layoutY="100.0" minHeight="16" minWidth="69" text="Show file content in CSV format">
+            <font>
+                <Font name="System Bold" size="12.0" />
+            </font>
+        </Label>
+        <Label layoutX="344.0" layoutY="100.0" minHeight="16" minWidth="69" text="Total columns:" />
+        <Label fx:id="labelCsvTotalColumns" layoutX="434.0" layoutY="100.0" prefHeight="17.0" prefWidth="43.0" text="0" />
         <!-- AnchorPane.leftAnchor for auto resize -->
-        <TableView fx:id="tableViewFileText" layoutX="20.0" layoutY="129.0" onDragDropped="#handleFileBoxOnDragDropped" onDragExited="#handleFileBoxOnDragExited" onDragOver="#handleFileBoxOnDragOver" prefHeight="250.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0">
-        <columns>
-          <TableColumn prefWidth="75.0" text="C1" />
-          <TableColumn prefWidth="75.0" text="C2" />
-        </columns>
-      </TableView>
-      <TextArea fx:id="textAreaFileText" layoutX="20.0" layoutY="410.0" prefHeight="265.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" />
-      <TextField id="textFieldFileBox" fx:id="textFieldFileBox" layoutX="90.0" layoutY="57.0" onDragDropped="#handleFileBoxOnDragDropped" onDragExited="#handleFileBoxOnDragExited" onDragOver="#handleFileBoxOnDragOver" prefHeight="25.0" prefWidth="634.0" />
-      <Label fx:id="labelFileBox1" layoutX="29.0" layoutY="105.0" minHeight="16" minWidth="69" text="Show file content in CSV format">
-         <font>
-            <Font name="System Bold" size="12.0" />
-         </font></Label>
-      <Label fx:id="labelFileBox11" layoutX="29.0" layoutY="384.0" minHeight="16" minWidth="69" text="Show file content in plain text format">
-         <font>
-            <Font name="System Bold" size="12.0" />
-         </font></Label>
-      <Label fx:id="labelFileBox12" layoutX="874.0" layoutY="14.0" minHeight="16" minWidth="69" text="v 0.01" />
-      <TextField fx:id="textFieldCsvSeparator" layoutX="761.0" layoutY="57.0" prefHeight="25.0" prefWidth="57.0" text="," />
-      <Label fx:id="labelFileBox2" layoutX="752.0" layoutY="34.0" minHeight="16" minWidth="69" text="CSV separator  (e.g.   ;   \t   \| )" />
-      <Label fx:id="labelFileBox21" layoutX="29.0" layoutY="61.0" minHeight="16" minWidth="57.0" prefHeight="17.0" prefWidth="57.0" text="File path: " />
+        <TableView fx:id="tableViewFileText" layoutX="20.0" layoutY="129.0" onDragDropped="#handleFileBoxOnDragDropped" onDragExited="#handleFileBoxOnDragExited" onDragOver="#handleFileBoxOnDragOver" prefHeight="250.0" 
+                   AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="120.0" AnchorPane.bottomAnchor="350.0" >
+            <columns>
+                <TableColumn prefWidth="75.0" text="C1" />
+                <TableColumn prefWidth="75.0" text="C2" />
+            </columns>
+        </TableView>
       
+        <Label fx:id="labelFileBox11" layoutX="29.0" layoutY="384.0" minHeight="16" minWidth="69" text="Show file content in plain text format" 
+               AnchorPane.bottomAnchor="320.0" >
+            <font>
+                <Font name="System Bold" size="12.0" />
+            </font>
+        </Label>
+        <TextArea fx:id="textAreaFileText" layoutX="20.0" layoutY="410.0" prefHeight="300.0" 
+                  AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.bottomAnchor="20.0" />
+        <TextField id="textFieldFileBox" fx:id="textFieldFileBox" layoutX="90.0" layoutY="57.0" onDragDropped="#handleFileBoxOnDragDropped" onDragExited="#handleFileBoxOnDragExited" onDragOver="#handleFileBoxOnDragOver" prefHeight="25.0" prefWidth="634.0" />
       
-      <Label layoutX="344.0" layoutY="105.0" minHeight="16" minWidth="69" text="Total columns:" />
-      <Label fx:id="labelCsvTotalColumns" layoutX="434.0" layoutY="105.0" prefHeight="17.0" prefWidth="43.0" text="0" />
+
     </children>
 </AnchorPane>
